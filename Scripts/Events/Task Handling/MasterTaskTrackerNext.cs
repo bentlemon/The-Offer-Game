@@ -10,13 +10,13 @@ public class MasterTaskTrackerNight : MonoBehaviour
 
     [Header("Other stuff")]
     [SerializeField] public TMP_Text informationText;
-    [SerializeField] private GameObject totalTaskUI; // UI-elementet som ska aktiveras
+    [SerializeField] private GameObject totalTaskUI;
     public TMP_Text getOutText;
 
     [Header("Effect zone for secound task")]
-    [SerializeField] private GameObject effectZoneTaskOne; // Referens till EffectActiveZone
-    [SerializeField] public GameObject ExitZone; // Referens till EffectActiveZone
-    [SerializeField] public GameObject ExitZoneOut; // Referens till EffectActiveZone
+    [SerializeField] private GameObject effectZoneTaskOne;   // Referens for EffectActiveZone
+    [SerializeField] public GameObject ExitZone;             // Referens for EffectActiveZone
+    [SerializeField] public GameObject ExitZoneOut;          // Referens for EffectActiveZone
 
     private GameObject firstAngel;
     private GameObject secoundAngel;
@@ -25,19 +25,19 @@ public class MasterTaskTrackerNight : MonoBehaviour
 
     void Start()
     {
-        // Dölj TotalTaskUI initialt
+        // Hide TotalTaskUI initial
         if (totalTaskUI != null)
         {
             totalTaskUI.SetActive(false);
         }
 
-        // Dölj gettingDarkText initialt
+        // Hide  gettingDarkText Init
         if (informationText != null)
         {
-            informationText.gameObject.SetActive(false); // Dölja texten i början
+            informationText.gameObject.SetActive(false);
         }
 
-        // Hämta och lagra referens till det inaktiva objektet
+        // Get reference and store it in inactive obj
         Transform childTransform = sceneTasks[1].transform.Find("GetKeyTask/Kneeling_angel_gotkey");
         if (childTransform != null)
         {
@@ -45,7 +45,7 @@ public class MasterTaskTrackerNight : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Barnbarnsobjekt med namnet 'GetKeyTask/Kneeling_angel_gotkey' hittades inte i sceneTask[1].");
+            Debug.LogWarning("GetKeyTask obj returned null");
         }
 
         firstAngel = GameObject.Find("Kneeling_angel");
@@ -60,16 +60,16 @@ public class MasterTaskTrackerNight : MonoBehaviour
         //Debug.Log("Aktuellt onTask: " + onTask);
         //Debug.Log("All Tasks Complete: " + sceneTasks[onTask].GetComponent<TaskTracker>().allTasksComplete);
 
-        // Aktivera TotalTaskUI
+        // Activate TotalTaskUI
         if (totalTaskUI != null && !sceneTasks[1].GetComponent<TaskTracker>().allTasksComplete)
         {
             totalTaskUI.SetActive(true);
         }
 
-        // Kontrollera om alla deluppgifter i den aktuella task är klara
+        // Check that every subtask is done
         if (sceneTasks[onTask].GetComponent<TaskTracker>().allTasksComplete)
         {
-            // Deaktivera föregående task's EffectActiveZone
+            // Deactivate last task's EffectActiveZone
             var previousEffectActiveZone = sceneTasks[onTask].transform.Find("EffectActiveZone");
             if (previousEffectActiveZone != null)
             {
@@ -84,18 +84,17 @@ public class MasterTaskTrackerNight : MonoBehaviour
 
         if (onTask == 1 && !sceneTasks[1].GetComponent<TaskTracker>().allTasksComplete)
         {
-            // Aktivera den specifika EffectActiveZone för den andra uppgiften
+            // Activate the specifik EffectActiveZone for the next task
             if (effectZoneTaskOne != null)
             {
-                effectZoneTaskOne.SetActive(true); // Aktivera zonen
+                effectZoneTaskOne.SetActive(true); // Activate zone
                 Debug.Log("EffectActiveZone har aktiverats.");
             }
 
-            // Göm UI-element och aktivera specifika objekt
             totalTaskUI.SetActive(false);
             firstAngel.SetActive(false);
 
-            // Aktivera secoundAngel om den är inaktiv
+            // Activate secondAngel if it's inactive
             if (secoundAngel != null && !secoundAngel.activeSelf)
             {
                 secoundAngel.SetActive(true);
@@ -106,8 +105,6 @@ public class MasterTaskTrackerNight : MonoBehaviour
         {
             ExitZone.SetActive(false); 
             ExitZoneOut.SetActive(true);
-            // Trigga text om att ta sig ut
-            //ActivateInformationText();
         }
     }
 
@@ -116,8 +113,8 @@ public class MasterTaskTrackerNight : MonoBehaviour
         if (informationText != null)
         {
             Debug.Log("Im trying to display the text");
-            informationText.gameObject.SetActive(true); // Aktivera texten
-            StartCoroutine(HideInformationTextAfterDelay(6f)); // Dölja efter 5 sekunder
+            informationText.gameObject.SetActive(true); // Activate text
+            StartCoroutine(HideInformationTextAfterDelay(6f)); // Hide text after 5 sec
         }
     }
 
@@ -126,7 +123,7 @@ public class MasterTaskTrackerNight : MonoBehaviour
         yield return new WaitForSeconds(delay);
         if (informationText != null)
         {
-            informationText.gameObject.SetActive(false); // Dölja texten
+            informationText.gameObject.SetActive(false); // Hide text
         }
     }
 }
