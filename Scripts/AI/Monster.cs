@@ -75,7 +75,7 @@ public class Monster : MonoBehaviour
     void Update()
     {
 
-            btree.Process(); // Kör beteendeträdet
+            btree.Process();
        
     }
 }
